@@ -1,0 +1,2 @@
+asset_id,asset_name,use_case,grain,definition_path,source_binding,source_objects,refresh,owner,status,fixture_captured,notes
+L3-XXXX-0001,vw_shipment_cycle_time,supply-performance,one row per shipment leg,definitions/vw_shipment_cycle_time.sql,pre-l2,IRT.SHIPMENT_HDR;WMS.SHIP_STATUS,daily,TODO,defined,FALSE,Semantics aligned to L2 shipment target; repoint after L2 build

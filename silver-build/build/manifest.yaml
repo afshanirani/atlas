@@ -1,0 +1,29 @@
+# Build Manifest
+#
+# Names exactly which subjects and which artifact versions are in a build. The ETL reads
+# this — it does not glob the repo. That gives a promotable, reproducible unit, and lets a
+# subject sit approved-but-not-deployed without special handling.
+
+version: 0.1.0
+build_id: TODO           # set per build, e.g. 2026-08-17-a
+environment: TODO        # dev | test | prod
+
+subjects:
+  - name: TODO
+    abbreviation: TODO
+    mapping_commit: TODO       # git SHA of the reviewed mapping.csv
+    review_record: TODO        # dated section in 2-ia-model/review.md
+    include_l2: true
+    include_l3: false          # L3 config joins the build once refactored
+
+# Only rows with status = approved are consumed. This is enforced at build, not by
+# editing the CSV.
+row_filter:
+  status: [approved]
+
+validation:
+  required: true
+  command: python3 schemas/validate/validate_mappings.py
+
+# Promotion: a build_id that passed validation in a lower environment is promoted by
+# reference. Never rebuild from a different commit under the same build_id.

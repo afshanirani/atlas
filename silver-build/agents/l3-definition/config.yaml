@@ -1,0 +1,23 @@
+agent: l3-definition
+prompt_version: 0.1.0
+stage: l3-definition
+
+model: TODO
+temperature: 0.0
+max_output_tokens: TODO
+
+schema: schemas/l3-definition.schema.json
+
+inputs:
+  - subjects/{subject}/2-ia-model/mapping.csv    # align semantics with L2 targets
+  - subjects/{subject}/1-discovery/summary.md
+  - subjects/{subject}/4-l3/bindings.csv
+
+output:
+  path: subjects/{subject}/4-l3/bindings.csv
+  mode: append
+  status_on_write: defined
+
+validation:
+  command: python3 schemas/validate/validate_mappings.py {subject}
+  required: true

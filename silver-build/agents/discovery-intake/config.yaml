@@ -1,0 +1,18 @@
+agent: discovery-intake
+prompt_version: 0.1.0
+stage: discovery
+
+model: TODO
+temperature: 0.0
+max_output_tokens: TODO
+
+inputs:
+  - subjects/{subject}/1-discovery/sources/
+
+output:
+  path: subjects/{subject}/1-discovery/summary.md
+  mode: write
+
+notes: |
+  Source material may contain confidential or uncontrolled extracts. Confirm handling
+  rules before processing — see .gitignore.

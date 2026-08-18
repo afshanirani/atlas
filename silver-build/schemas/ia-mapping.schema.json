@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "IA Mapping Row",
+  "description": "One proposed or reviewed mapping from a source field to a target L2 entity attribute. The CSV is simultaneously build configuration, a review surface, and a provenance record.",
+  "type": "object",
+  "columnOrder": [
+    "mapping_id", "target_entity", "target_attribute", "target_grain",
+    "source_system", "source_object", "source_field", "join_key", "transform_rule",
+    "cde_flag", "dq_rule",
+    "status", "reviewer", "review_date", "notes",
+    "discovery_ref", "agent_confidence", "agent_run_id"
+  ],
+  "columnGroups": {
+    "build": ["target_entity", "target_attribute", "target_grain", "source_system", "source_object", "source_field", "join_key", "transform_rule", "cde_flag", "dq_rule"],
+    "review": ["status", "reviewer", "review_date", "notes"],
+    "provenance": ["discovery_ref", "agent_confidence", "agent_run_id"]
+  },
+  "required": [
+    "mapping_id", "target_entity", "target_attribute", "target_grain",
+    "source_system", "source_object", "source_field",
+    "cde_flag", "status", "discovery_ref", "agent_run_id"
+  ],
+  "requiredWhenApproved": ["reviewer", "review_date"],
+  "unique": ["mapping_id"],
+  "properties": {
+    "mapping_id":       { "type": "string", "pattern": "^MAP-[A-Z0-9]+-[0-9]{4}$", "description": "MAP-<SUBJECT_ABBR>-NNNN. Stable for the life of the row." },
+    "target_entity":    { "type": "string", "description": "L2 connected entity, snake_case." },
+    "target_attribute": { "type": "string", "description": "Attribute on the target entity, snake_case." },
+    "target_grain":     { "type": "string", "description": "One row per what. Must be identical across all rows for a given target_entity." },
+    "source_system":    { "type": "string", "description": "System of record, matching the discovery source index." },
+    "source_object":    { "type": "string", "description": "Table, file, API resource, or report." },
+    "source_field":     { "type": "string", "description": "Field or expression at the source." },
+    "join_key":         { "type": "string", "description": "Key used to relate this source to the target entity grain. Blank where the source is already at grain." },
+    "transform_rule":   { "type": "string", "description": "Deterministic rule in the ETL framework's expression syntax. Prose here is a defect — it cannot be built from." },
+    "cde_flag":         { "type": "string", "enum": ["TRUE", "FALSE"], "description": "Critical Data Element. Drives quality monitoring." },
+    "dq_rule":          { "type": "string", "description": "Declared quality expectations, semicolon-separated. e.g. 'not null; unique within source_system'." },
+    "status":           { "type": "string", "enum": ["proposed", "approved", "rejected", "deferred"], "description": "Only 'approved' rows are consumed by the build. Rejected and deferred rows are retained as a record." },
+    "reviewer":         { "type": "string", "description": "Named human who made the status decision." },
+    "review_date":      { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "notes":            { "type": "string", "description": "Rationale. For rejected and deferred rows this is mandatory in practice — it is what prevents the mapping being re-proposed." },
+    "discovery_ref":    { "type": "string", "description": "Resolvable citation into 1-discovery, e.g. 'summary.md#shipment-identifiers'." },
+    "agent_confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "Agent's confidence at proposal time. Never edited after review — it is a record of what the agent claimed, not of what is true." },
+    "agent_run_id":     { "type": "string", "description": "Resolves to a prompt version in agents/ia-mapping/CHANGELOG.md. Use 'human' for rows authored directly." }
+  }
+}

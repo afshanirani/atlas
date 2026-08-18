@@ -1,0 +1,23 @@
+agent: ia-mapping
+prompt_version: 0.1.0
+stage: ia-modeling
+
+model: TODO            # set to the sanctioned model on the work platform
+temperature: 0.0       # deterministic — this output feeds a build
+max_output_tokens: TODO
+
+schema: schemas/ia-mapping.schema.json
+
+inputs:
+  - subjects/{subject}/1-discovery/summary.md
+  - subjects/{subject}/1-discovery/sources/INDEX.md
+  - subjects/{subject}/2-ia-model/mapping.csv   # existing rows, for continuity
+
+output:
+  path: subjects/{subject}/2-ia-model/mapping.csv
+  mode: append
+  status_on_write: proposed
+
+validation:
+  command: python3 schemas/validate/validate_mappings.py {subject}
+  required: true       # a run that fails validation is not a completed run

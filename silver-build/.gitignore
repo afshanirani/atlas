@@ -1,0 +1,20 @@
+# Local environment
+.env
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Validation outputs are regenerated
+validation/results/*
+!validation/results/.gitkeep
+
+# Fixture payloads can be large — track manifests, not data
+# Consider Git LFS if these must be versioned in-repo
+validation/fixtures/**/data/
+
+# Discovery source material may contain uncontrolled or confidential extracts.
+# Track curated summaries; keep raw exports out unless cleared.
+subjects/*/1-discovery/sources/*
+!subjects/*/1-discovery/sources/.gitkeep
+!subjects/*/1-discovery/sources/INDEX.md

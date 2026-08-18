@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "L3 Asset Definition",
+  "description": "One analytical asset in the L3 layer. Tracks the source binding across the pre-L2 to L2 refactor.",
+  "type": "object",
+  "columnOrder": [
+    "asset_id", "asset_name", "use_case", "grain", "definition_path",
+    "source_binding", "source_objects", "refresh",
+    "owner", "status", "fixture_captured", "notes"
+  ],
+  "required": ["asset_id", "asset_name", "use_case", "grain", "definition_path", "source_binding", "owner", "status"],
+  "unique": ["asset_id"],
+  "properties": {
+    "asset_id":         { "type": "string", "pattern": "^L3-[A-Z0-9]+-[0-9]{4}$" },
+    "asset_name":       { "type": "string", "description": "Deployed view or table name." },
+    "use_case":         { "type": "string", "description": "Gold consumer this serves." },
+    "grain":            { "type": "string", "description": "One row per what." },
+    "definition_path":  { "type": "string", "description": "Path under 4-l3/definitions/." },
+    "source_binding":   { "type": "string", "enum": ["pre-l2", "refactor-pending", "l2"], "description": "Where this asset currently reads from. The join state of the pipeline." },
+    "source_objects":   { "type": "string", "description": "Objects currently read, semicolon-separated." },
+    "refresh":          { "type": "string", "description": "Cadence or trigger." },
+    "owner":            { "type": "string" },
+    "status":           { "type": "string", "enum": ["defined", "implemented", "refactored", "validated", "retired"] },
+    "fixture_captured": { "type": "string", "enum": ["TRUE", "FALSE"], "description": "Whether pre-refactor output was captured. Cannot become TRUE after the binding changes — the window closes." },
+    "notes":            { "type": "string" }
+  }
+}
